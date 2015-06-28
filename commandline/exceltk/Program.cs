@@ -57,7 +57,7 @@ namespace exceltk
             if (ret!=0)
             {
                 Console.WriteLine();
-                Console.WriteLine("Usecase:exceltk -t md -xsl xslfile [-sheet sheetname]");
+                Console.WriteLine("Usecase:exceltk -t md -xls xlsfile [-sheet sheetname]");
             }
         }
     }
