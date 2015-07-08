@@ -8,4 +8,5 @@
 
 # features
 - [x] convert excel to markdown, see /commandline/exceltk
+- [x] gui for exceltk
 - [ ] auto fetch posts of student's cnblog
