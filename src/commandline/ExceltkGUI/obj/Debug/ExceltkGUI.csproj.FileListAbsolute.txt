@@ -1,0 +1,8 @@
+C:\GitHub\set\src\commandline\ExceltkGUI\obj\Debug\ExceltkGUI.csprojResolveAssemblyReference.cache
+C:\GitHub\set\src\commandline\ExceltkGUI\obj\Debug\ExceltkGUI.ExceltkGUI.resources
+C:\GitHub\set\src\commandline\ExceltkGUI\obj\Debug\ExceltkGUI.Properties.Resources.resources
+C:\GitHub\set\src\commandline\ExceltkGUI\obj\Debug\ExceltkGUI.csproj.GenerateResource.Cache
+C:\GitHub\set\src\commandline\ExceltkGUI\bin\Debug\ExceltkGUI.exe
+C:\GitHub\set\src\commandline\ExceltkGUI\bin\Debug\ExceltkGUI.pdb
+C:\GitHub\set\src\commandline\ExceltkGUI\obj\Debug\ExceltkGUI.exe
+C:\GitHub\set\src\commandline\ExceltkGUI\obj\Debug\ExceltkGUI.pdb
