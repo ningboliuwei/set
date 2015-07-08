@@ -54,8 +54,7 @@
             this.文件FToolStripMenuItem});
 			this.menuStripMain.Location = new System.Drawing.Point(0, 0);
 			this.menuStripMain.Name = "menuStripMain";
-			this.menuStripMain.Padding = new System.Windows.Forms.Padding(4, 1, 0, 1);
-			this.menuStripMain.Size = new System.Drawing.Size(652, 24);
+			this.menuStripMain.Size = new System.Drawing.Size(978, 32);
 			this.menuStripMain.TabIndex = 0;
 			this.menuStripMain.Text = "menuStrip1";
 			// 
@@ -66,33 +65,32 @@
             this.toolStripSeparator1,
             this.ExitToolStripMenuItem});
 			this.文件FToolStripMenuItem.Name = "文件FToolStripMenuItem";
-			this.文件FToolStripMenuItem.Size = new System.Drawing.Size(56, 22);
+			this.文件FToolStripMenuItem.Size = new System.Drawing.Size(80, 28);
 			this.文件FToolStripMenuItem.Text = "文件(&F)";
 			// 
 			// OpenFileToolStripMenuItem
 			// 
 			this.OpenFileToolStripMenuItem.Name = "OpenFileToolStripMenuItem";
-			this.OpenFileToolStripMenuItem.Size = new System.Drawing.Size(115, 22);
+			this.OpenFileToolStripMenuItem.Size = new System.Drawing.Size(156, 30);
 			this.OpenFileToolStripMenuItem.Text = "打开(&O)";
 			this.OpenFileToolStripMenuItem.Click += new System.EventHandler(this.OpenFileToolStripMenuItem_Click);
 			// 
 			// toolStripSeparator1
 			// 
 			this.toolStripSeparator1.Name = "toolStripSeparator1";
-			this.toolStripSeparator1.Size = new System.Drawing.Size(112, 6);
+			this.toolStripSeparator1.Size = new System.Drawing.Size(153, 6);
 			// 
 			// ExitToolStripMenuItem
 			// 
 			this.ExitToolStripMenuItem.Name = "ExitToolStripMenuItem";
-			this.ExitToolStripMenuItem.Size = new System.Drawing.Size(115, 22);
+			this.ExitToolStripMenuItem.Size = new System.Drawing.Size(156, 30);
 			this.ExitToolStripMenuItem.Text = "退出(&X)";
 			this.ExitToolStripMenuItem.Click += new System.EventHandler(this.ExitToolStripMenuItem_Click);
 			// 
 			// splitContainer1
 			// 
 			this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.splitContainer1.Location = new System.Drawing.Point(0, 24);
-			this.splitContainer1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+			this.splitContainer1.Location = new System.Drawing.Point(0, 32);
 			this.splitContainer1.Name = "splitContainer1";
 			// 
 			// splitContainer1.Panel1
@@ -102,30 +100,29 @@
 			// splitContainer1.Panel2
 			// 
 			this.splitContainer1.Panel2.Controls.Add(this.rtxCode);
-			this.splitContainer1.Size = new System.Drawing.Size(652, 472);
-			this.splitContainer1.SplitterDistance = 217;
-			this.splitContainer1.SplitterWidth = 3;
+			this.splitContainer1.Size = new System.Drawing.Size(978, 712);
+			this.splitContainer1.SplitterDistance = 325;
 			this.splitContainer1.TabIndex = 1;
 			// 
 			// lvwFiles
 			// 
 			this.lvwFiles.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.lvwFiles.Location = new System.Drawing.Point(0, 0);
-			this.lvwFiles.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+			this.lvwFiles.MultiSelect = false;
 			this.lvwFiles.Name = "lvwFiles";
 			this.lvwFiles.ShowItemToolTips = true;
-			this.lvwFiles.Size = new System.Drawing.Size(217, 472);
+			this.lvwFiles.Size = new System.Drawing.Size(325, 712);
 			this.lvwFiles.TabIndex = 0;
 			this.lvwFiles.UseCompatibleStateImageBehavior = false;
 			this.lvwFiles.View = System.Windows.Forms.View.List;
+			this.lvwFiles.SelectedIndexChanged += new System.EventHandler(this.lvwFiles_SelectedIndexChanged);
 			// 
 			// rtxCode
 			// 
 			this.rtxCode.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.rtxCode.Location = new System.Drawing.Point(0, 0);
-			this.rtxCode.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
 			this.rtxCode.Name = "rtxCode";
-			this.rtxCode.Size = new System.Drawing.Size(432, 472);
+			this.rtxCode.Size = new System.Drawing.Size(649, 712);
 			this.rtxCode.TabIndex = 0;
 			this.rtxCode.Text = "";
 			// 
@@ -145,23 +142,22 @@
 			// statusStripMain
 			// 
 			this.statusStripMain.ImageScalingSize = new System.Drawing.Size(24, 24);
-			this.statusStripMain.Location = new System.Drawing.Point(0, 474);
+			this.statusStripMain.Location = new System.Drawing.Point(0, 722);
 			this.statusStripMain.Name = "statusStripMain";
-			this.statusStripMain.Padding = new System.Windows.Forms.Padding(1, 0, 9, 0);
-			this.statusStripMain.Size = new System.Drawing.Size(652, 22);
+			this.statusStripMain.Padding = new System.Windows.Forms.Padding(2, 0, 14, 0);
+			this.statusStripMain.Size = new System.Drawing.Size(978, 22);
 			this.statusStripMain.TabIndex = 2;
 			this.statusStripMain.Text = "statusStrip1";
 			// 
 			// ExceltkGUI
 			// 
-			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
+			this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(652, 496);
+			this.ClientSize = new System.Drawing.Size(978, 744);
 			this.Controls.Add(this.statusStripMain);
 			this.Controls.Add(this.splitContainer1);
 			this.Controls.Add(this.menuStripMain);
 			this.MainMenuStrip = this.menuStripMain;
-			this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
 			this.Name = "ExceltkGUI";
 			this.Text = "ExceltkGUI";
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ExceltkGUI_FormClosing);

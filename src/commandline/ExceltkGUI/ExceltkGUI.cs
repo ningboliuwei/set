@@ -20,17 +20,20 @@ namespace ExceltkGUI
 
 		private void OpenFileToolStripMenuItem_Click(object sender, EventArgs e)
 		{
+			List<string> xlsFiles = new List<string>();
+
 			if (ofdExcel.ShowDialog() == DialogResult.OK)
 			{
-				//将选择的所有文件的文件名加入列表框，并在 imageFileNames 中保存文件路径
+				//将选择的所有文件的文件名加入列表框合并在 imageFileNames 中保存文件路径
 				foreach (string fileName in ofdExcel.FileNames)
 				{
 					lvwFiles.Items.Add(Path.GetFileName(fileName));
 					//此处需要将ShowItemToolTips设为True
 					lvwFiles.Items[lvwFiles.Items.Count - 1].ToolTipText = fileName;
+					xlsFiles.Add(fileName);
 				}
 
-
+				bgwConvert.RunWorkerAsync(xlsFiles);
 			}
 		}
 
@@ -49,28 +52,21 @@ namespace ExceltkGUI
 			}
 		}
 
-		private void Convert(string[] files)
-		{
-
-		}
 
 		private void bgwConvert_DoWork(object sender, DoWorkEventArgs e)
 		{
 			//将各参数拆箱
-			string tesseractOcrDir = ((List<object>)e.Argument)[0].ToString();
-			string outputDir = ((List<object>)e.Argument)[1].ToString();
-			List<string> imageFilePaths = (List<string>)((List<object>)e.Argument)[2];
-			string langType = ((List<object>)e.Argument)[3].ToString();
+			List<string> xlsFiles = (List<string>)e.Argument;
 
-			//进度条前期空
-			int beforeSpan = 10;
+			//进度条前期空 
+			//int beforeSpan = 10;
 			//进度条后期空
-			int afterSpan = 10;
+			//int afterSpan = 10;
 
 			//先显示一点进度条
-			bgwConvert.ReportProgress(beforeSpan);
+			//bgwConvert.ReportProgress(beforeSpan);
 
-			for (int i = 0; i < imageFilePaths.Count; i++)
+			for (int i = 0; i < xlsFiles.Count; i++)
 			{
 				//取消当前操作
 				if (bgwConvert.CancellationPending)
@@ -80,33 +76,46 @@ namespace ExceltkGUI
 					return;
 				}
 
-
-				//获取当前图片路径
-				string imageFilePath = imageFilePaths[i];
-				//获取图片对应的结果文件的文件路径（默认在图片路径后系统自动加.txt)
-				string outputResultFilePath = outputDir + imageFilePath.Substring(imageFilePath.LastIndexOf("\\") + 1);
-
-				//Common.InvokeOcrCommandLine(new Dictionary<string, string>
-				//{
-				//	{"sourceImagePath", imageFilePath},
-				//	{"resultFilePath", outputResultFilePath}
-				//});
-
-				CommandLineProcess command = new CommandLineProcess(new Dictionary<string, string> { { "xlsfile", langType } });
+				CommandLineProcess command = new CommandLineProcess(new Dictionary<string, string> { { "xlsFile", xlsFiles[i] } });
 				command.Process();
 
 				//报告进度
-				bgwConvert.ReportProgress(beforeSpan + (i + 1) * (100 - beforeSpan - afterSpan) / imageFilePaths.Count);
+				//bgwConvert.ReportProgress(beforeSpan + (i + 1) * (100 - beforeSpan - afterSpan) / xlsFiles.Count);
 			}
 
-			bgwConvert.ReportProgress(100 - afterSpan);
+			//bgwConvert.ReportProgress(100 - afterSpan);
 			//稍微暂停一下，以表现满格前最后一步动作
-			Thread.Sleep(1000);
+			//Thread.Sleep(1000);
 
 			//进度条满格
-			bgwConvert.ReportProgress(100);
+			//bgwConvert.ReportProgress(100);
 			//稍微暂停一下，以表现满格
-			Thread.Sleep(500);
+			//Thread.Sleep(500);
+		}
+
+		private void lvwFiles_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			//MessageBox.Show(lvwFiles.SelectedItems);
+			if (lvwFiles.SelectedItems.Count != 0)
+			{
+				string xlsFile = lvwFiles.Items[lvwFiles.SelectedIndices[0]].ToolTipText;
+				string markDownFileName = Path.GetFileNameWithoutExtension(xlsFile);
+				string markDownFilePath = Path.Combine(Path.GetDirectoryName(xlsFile), markDownFileName + "Rank.md");
+
+				ShowMarkDownFile(markDownFilePath);
+			}
+		}
+
+		private void ShowMarkDownFile(string markDownPath)
+		{
+			try
+			{
+				rtxCode.Text = File.ReadAllText(markDownPath);
+			}
+			catch (Exception ex)
+			{
+				throw new Exception(ex.Message);
+			}
 		}
 	}
 }

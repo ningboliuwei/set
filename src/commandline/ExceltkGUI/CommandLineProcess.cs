@@ -23,9 +23,7 @@ namespace ExceltkGUI
 			{
 				using (Process process = new Process())
 				{
-					//process.StartInfo.FileName = _commandPath;
 					process.StartInfo.FileName = Path.Combine(Application.StartupPath, "exceltk.exe");
-					//process.StartInfo.Arguments = _arguments;
 					process.StartInfo.Arguments = string.Format("-t md -xls {0}", _args["xlsFile"]);
 					process.StartInfo.UseShellExecute = false;
 					process.StartInfo.CreateNoWindow = true;
