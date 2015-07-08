@@ -92,13 +92,8 @@ namespace ExceltkGUI
 				//	{"resultFilePath", outputResultFilePath}
 				//});
 
-				CommandLineProcess command = new CommandLineProcess(new Dictionary<string, string>
-				{
-					{"xlsfile", langType}
-				});
-
+				CommandLineProcess command = new CommandLineProcess(new Dictionary<string, string> { { "xlsfile", langType } });
 				command.Process();
-
 
 				//报告进度
 				bgwConvert.ReportProgress(beforeSpan + (i + 1) * (100 - beforeSpan - afterSpan) / imageFilePaths.Count);

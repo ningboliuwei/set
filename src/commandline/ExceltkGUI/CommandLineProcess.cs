@@ -10,7 +10,14 @@ namespace ExceltkGUI
 {
 	class CommandLineProcess
 	{
-		public void Process(Dictionary<string, string> args)
+		private Dictionary<string, string> _args;
+
+		public CommandLineProcess(Dictionary<string, string> args)
+		{
+			_args = args;
+		}
+
+		public void Process()
 		{
 			try
 			{
@@ -19,7 +26,7 @@ namespace ExceltkGUI
 					//process.StartInfo.FileName = _commandPath;
 					process.StartInfo.FileName = Path.Combine(Application.StartupPath, "exceltk.exe");
 					//process.StartInfo.Arguments = _arguments;
-					process.StartInfo.Arguments = string.Format("-t md -xls {0}", args["xlsFile"]);
+					process.StartInfo.Arguments = string.Format("-t md -xls {0}", _args["xlsFile"]);
 					process.StartInfo.UseShellExecute = false;
 					process.StartInfo.CreateNoWindow = true;
 					process.StartInfo.RedirectStandardOutput = true;
