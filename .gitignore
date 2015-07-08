@@ -6,3 +6,12 @@
 /src/commandline/exceltk.suo
 /src/commandline/exceltk/obj
 /src/commandline/exceltk/bin
+/src/commandline/ExceltkGUI/bin
+/src/commandline/ExceltkGUI/obj
+/src/commandline/excel/bin/Debug/Excel.dll
+/src/commandline/excel/bin/Debug/Excel.pdb
+/src/commandline/excel/bin/Debug/ICSharpCode.SharpZipLib.dll
+/src/commandline/excel/obj/Debug/DesignTimeResolveAssemblyReferencesInput.cache
+/src/commandline/excel/obj/Debug/Excel.csproj.FileListAbsolute.txt
+/src/commandline/excel/obj/Debug/Excel.dll
+/src/commandline/excel/obj/Debug/Excel.pdb
