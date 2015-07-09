@@ -95,14 +95,13 @@ namespace ExceltkGUI
 
 		private void lvwFiles_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			//MessageBox.Show(lvwFiles.SelectedItems);
 			if (lvwFiles.SelectedItems.Count != 0)
 			{
 				string xlsFile = lvwFiles.Items[lvwFiles.SelectedIndices[0]].ToolTipText;
 				string markDownFileName = Path.GetFileNameWithoutExtension(xlsFile);
 				string markDownFilePath = Path.Combine(Path.GetDirectoryName(xlsFile), markDownFileName + "Rank.md");
 
-				ShowMarkDownFile(markDownFilePath);
+				//ShowMarkDownFile(markDownFilePath);
 			}
 		}
 
@@ -115,6 +114,37 @@ namespace ExceltkGUI
 			catch (Exception ex)
 			{
 				throw new Exception(ex.Message);
+			}
+		}
+
+		private void toolStripMenuItemDelete_Click(object sender, EventArgs e)
+		{
+			this.DeleteFiles();
+		}
+
+		private void DeleteFiles()
+		{
+			List<string> files = new List<string>();
+
+			//foreach (ListViewItem item in lvwFiles.Items)
+			//{
+			//	files.Add(item.ToolTipText);
+			//}
+
+			for (int i = lvwFiles.Items.Count - 1; i >= 0; i--)
+			{
+				if (lvwFiles.Items[i].Selected)
+				{
+					lvwFiles.Items.RemoveAt(i);
+				}
+			}
+		}
+
+		private void lvwFiles_KeyPress(object sender, KeyPressEventArgs e)
+		{
+			if (e.KeyChar == (char)Keys.Delete)
+			{
+				DeleteFiles();
 			}
 		}
 	}
