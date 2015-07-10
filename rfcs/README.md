@@ -8,4 +8,3 @@ The "RFC" (request for comments) process is intended to provide a consistent and
 
 Items
 -----
-- [程序媛](https://github.com/fanfeilong/set/blob/master/rfcs/female-programmer.md)
