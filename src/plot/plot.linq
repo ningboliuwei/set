@@ -1,6 +1,8 @@
 <Query Kind="Program">
   <Namespace>System</Namespace>
   <Namespace>System.Drawing</Namespace>
+  <Namespace>System.Xml.Serialization</Namespace>
+  <Namespace>System.Drawing.Imaging</Namespace>
 </Query>
 
 void Main(){
@@ -18,6 +20,7 @@ void Main(){
 		//.Curve("LOF-AIR",y,x,Color.Red,Color.Blue)
 		.Histogram("test",x,y,Color.LightGray,Color.LightBlue)
 		.Bitmap
+		.ToBase64ImageTag(ImageFormat.Png,"image magic")
 		.Dump();
 }
 
@@ -387,5 +390,26 @@ public static class Extension{
 		int shift=0;
 		while(v>0) {shift++;v/=10;}
 		return shift;
+	}
+	public static string ToBase64String(this Bitmap bmp, ImageFormat imageFormat){
+		string base64String = string.Empty;
+		MemoryStream memoryStream = new MemoryStream();
+		bmp.Save(memoryStream, imageFormat);
+		memoryStream.Position = 0;
+		byte[] byteBuffer = memoryStream.ToArray();
+		memoryStream.Close();
+		base64String = Convert.ToBase64String(byteBuffer);
+		byteBuffer = null;
+		return base64String;
+	}
+	public static string ToBase64ImageTag(this Bitmap bmp, ImageFormat imageFormat,string alt){
+		string imgTag = string.Empty;
+		string base64String = string.Empty;
+		base64String = bmp.ToBase64String(imageFormat);
+		imgTag = "<img alt=\""+alt+"\" src=\"data:image/" + imageFormat.ToString() + ";base64,";
+		imgTag += base64String + "\" ";
+		imgTag += "width=\"" + bmp.Width.ToString() + "\" ";
+		imgTag += "height=\"" + bmp.Height.ToString() + "\" />";
+		return imgTag;
 	}
 }
