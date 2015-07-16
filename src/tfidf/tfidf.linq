@@ -8,6 +8,7 @@
 
 void Main()
 {
+    // see:https://en.wikipedia.org/wiki/Tf%E2%80%93idf        
     var doc1 = new List<string>(){
         "this",
         "is",
