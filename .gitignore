@@ -15,3 +15,5 @@
 /src/commandline/excel/obj/Debug/Excel.csproj.FileListAbsolute.txt
 /src/commandline/excel/obj/Debug/Excel.dll
 /src/commandline/excel/obj/Debug/Excel.pdb
+/src/commandline/exceltk.v12.suo
+/src/commandline/excel/obj/Debug/*.cache
