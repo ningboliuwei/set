@@ -11,41 +11,41 @@
 
 void Main(){
     
-	var root = Path.GetDirectoryName(Util.CurrentQueryPath);
-	var output = Path.Combine(root,"statistic.md");
-	
-	// readme:
-	// required lib: CloseXML and DocumentFormat.OpenXml
-	// 
-	// - shool dir can be
-	// school1dir
-	//   class1dir
-	//     1234 xxx.xlsx
-	//     455 yyy.xlsx
-	//   class2dir
-	//     334 aaa.xlsx
-	//     987 bbb.xlsx
-	//   [students.xlsx]:optional, if exist, it's format is
-	//     1234 xxx blogurl1
-	//     455  yyy blourl2
-	
-	var schoolInfos = new Dictionary<string,string>{
-		{"school1","students.xlsx"},
-		{"school2","students.xlsx"},
-		{"school3",""}
-	};
+    var root = Path.GetDirectoryName(Util.CurrentQueryPath);
+    var output = Path.Combine(root,"statistic.md");
     
-	var sb = new StringBuilder();
-	foreach(var schoolInfo in schoolInfos){
-		var schoolDir = Path.Combine(root,schoolInfo.Key);
-		var blogUrlFile = Path.Combine(schoolDir,schoolInfo.Value);
-		var school = new SchoolAssessment(schoolDir,blogUrlFile);
-		school.Analyze();
-		school.DumpMarkDown(sb);
-	}
+    // readme:
+    // required lib: CloseXML and DocumentFormat.OpenXml
+    // 
+    // - shool dir can be
+    // school1dir
+    //   class1dir
+    //     1234 xxx.xlsx
+    //     455 yyy.xlsx
+    //   class2dir
+    //     334 aaa.xlsx
+    //     987 bbb.xlsx
+    //   [students.xlsx]:optional, if exist, it's format is
+    //     1234 xxx blogurl1
+    //     455  yyy blourl2
+    
+    var schoolInfos = new Dictionary<string,string>{
+        {"school1","students.xlsx"},
+        {"school2","students.xlsx"},
+        {"school3",""}
+    };
+    
+    var sb = new StringBuilder();
+    foreach(var schoolInfo in schoolInfos){
+        var schoolDir = Path.Combine(root,schoolInfo.Key);
+        var blogUrlFile = Path.Combine(schoolDir,schoolInfo.Value);
+        var school = new SchoolAssessment(schoolDir,blogUrlFile);
+        school.Analyze();
+        school.DumpMarkDown(sb);
+    }
     sb.ToString().Dump();
-	
-	File.WriteAllText(output,sb.ToString());
+    
+    File.WriteAllText(output,sb.ToString());
 }
 
 public class AssessmentItem{
@@ -78,7 +78,7 @@ public enum State{
 public class StudentAssessment{
     public FileInfo FileInfo{get;private set;}
     public string FileName{get;private set;}
-	public string Name{get;private set;}
+    public string Name{get;private set;}
     public string No{get;private set;}
     public List<AssessmentItem> Items{get;private set;}
     public State State{get;private set;}
@@ -143,13 +143,13 @@ public class StudentAssessment{
     
     public void Analyze(){
         // Parse No
-		var regex = @"(\d+)\s*(\w+\s*\w+)";
-		var match =Regex.Match(FileName,regex);
+        var regex = @"(\d+)\s*(\w+\s*\w+)";
+        var match =Regex.Match(FileName,regex);
         this.No = match.ValueAt(1).Trim();
         this.Name = match.ValueAt(2).Replace(" ","").Trim();
         
         // Read Xls
-		//FileInfo.FullName.Dump();
+        //FileInfo.FullName.Dump();
         var workBook = new XLWorkbook(FileInfo.FullName);
         var workSheet = workBook.Worksheets.ElementAt(0);
         var rowssUsed = workSheet.RowsUsed();
@@ -271,9 +271,9 @@ public class StudentAssessment{
               .Append(School.BlogTable[Name].Url)
               .Append(")");
         }else{
-			sb.Append(No);
-			//Name.Dump();
-		}
+            sb.Append(No);
+            //Name.Dump();
+        }
         sb.Append("|");
         
         foreach(var ass in Items){
@@ -282,7 +282,7 @@ public class StudentAssessment{
               .Append(ass.After)
               .Append("|");
         }
-		
+        
         sb.AppendFormat("{0}|",AHPW)
           .AppendFormat("{0}|",LOC)
           .AppendFormat("{0:##.00}|",Air);
@@ -496,11 +496,11 @@ public class ClassAssessment{
         sb.Append("|单项编号|班级单项分布图|\r\n|:--|:--|\r\n");
         for(int i=0;i<15;i++){
             sb.Append("|").Append(i+1).Append("|");
-			var stu = students.OrderBy(s=>s.Items[i].Air);
-			var itemAirMax = stu.Max(s=>s.Items[i].Air);
+            var stu = students.OrderBy(s=>s.Items[i].Air);
+            var itemAirMax = stu.Max(s=>s.Items[i].Air);
             foreach(var s in stu){
                 int iAIR = (int)(s.Items[i].Air/itemAirMax*8);
-				//string.Format("{0}/{1},{2}",s.Items[i].Air,itemAirMax,iAIR).Dump();
+                //string.Format("{0}/{1},{2}",s.Items[i].Air,itemAirMax,iAIR).Dump();
                 sb.Append(iAIR.ToSpark());
             }
             sb.Append("|\r\n");
@@ -532,9 +532,9 @@ public class ClassAssessment{
         
         sb.AppendLine();
         /**/
-		
-		// Plot Curve
-		students.DumpPlot(sb,Name);
+        
+        // Plot Curve
+        students.DumpPlot(sb,Name);
 
         
         // Dump Students Statistic 
@@ -559,9 +559,9 @@ public class ClassAssessment{
 }
 
 public class BlogItem{
-	public string Id{get;set;}
-	public string Name{get;set;}
-	public string Url{get;set;}
+    public string Id{get;set;}
+    public string Name{get;set;}
+    public string Url{get;set;}
 }
 
 public class SchoolAssessment{
@@ -583,32 +583,32 @@ public class SchoolAssessment{
             this.Classes.Add(new ClassAssessment(classDirectoryInfo,this));
         }
     }
-	
-	private Dictionary<string,BlogItem> FetchBlogItems(string file){
-		var linkTableBook = new XLWorkbook(file);
-		var linkSheet = linkTableBook.Worksheets.ElementAt(0);
-		var linkRows= linkSheet.RowsUsed();
-		var links = new Dictionary<string,BlogItem>();
-		foreach(var row in linkRows){
-			var cells = row.CellsUsed();
-			try{
-				var id = cells.ElementAt(0).Value.ToString().Trim();
-				var name = cells.ElementAt(1).Value.ToString().Trim().Replace(" ","");
-				var blog = cells.ElementAt(2).Hyperlink.ExternalAddress.AbsoluteUri;
-				links.Add(name,new BlogItem(){Id=id,Name=name,Url=blog});
-			}catch{
-				//Ignore
-			}
-		}
-		return links;
-	}
+    
+    private Dictionary<string,BlogItem> FetchBlogItems(string file){
+        var linkTableBook = new XLWorkbook(file);
+        var linkSheet = linkTableBook.Worksheets.ElementAt(0);
+        var linkRows= linkSheet.RowsUsed();
+        var links = new Dictionary<string,BlogItem>();
+        foreach(var row in linkRows){
+            var cells = row.CellsUsed();
+            try{
+                var id = cells.ElementAt(0).Value.ToString().Trim();
+                var name = cells.ElementAt(1).Value.ToString().Trim().Replace(" ","");
+                var blog = cells.ElementAt(2).Hyperlink.ExternalAddress.AbsoluteUri;
+                links.Add(name,new BlogItem(){Id=id,Name=name,Url=blog});
+            }catch{
+                //Ignore
+            }
+        }
+        return links;
+    }
     public void Analyze(){
         // Parse Blog Urls File
         if(File.Exists(BlogFile)){
-			BlogTable = FetchBlogItems(BlogFile);
-		}else{
-			BlogTable = new Dictionary<string,BlogItem>();
-		}
+            BlogTable = FetchBlogItems(BlogFile);
+        }else{
+            BlogTable = new Dictionary<string,BlogItem>();
+        }
         
         // Analyze Classes
         foreach(var c in Classes){
@@ -621,38 +621,38 @@ public class SchoolAssessment{
         
         
     }
-	
-	private static bool hasDumpDesc = false;
+    
+    private static bool hasDumpDesc = false;
     public void DumpMarkDown(StringBuilder sb){
         
         // Dump AssDescription Table
-		if(!hasDumpDesc){
-			hasDumpDesc = true;
-			var firstClass = Classes.First();
-			var firstValidStudent = firstClass.Students.Where(s=>s.State == State.Valid).First();
-			
-			sb.AppendLine("# 单项描述表")
-			.Append("|单项编号|单项描述|")
-			.AppendLine()
-			.Append("|:--|:--|")
-			.AppendLine();
-			
-			int j=1;
-			foreach(var ass in firstValidStudent.Items){
-				sb.Append("|单项")
-				.Append(j++)
-				.Append("|")
-				.Append(ass.Description)
-				.Append("|")
-				.AppendLine();
-			}
-			sb.AppendLine("|AHPW|SE: Average Hours Per Week 平均每周所花时间|")
-			.AppendLine("|LOC|SE: Lines Of Code 代码行数|")
-			.AppendLine("|AIR|SE：Average Improvement Rate 平均提高幅度|")
-			.AppendLine();
-		}else{
-			sb.AppendLine();
-		}
+        if(!hasDumpDesc){
+            hasDumpDesc = true;
+            var firstClass = Classes.First();
+            var firstValidStudent = firstClass.Students.Where(s=>s.State == State.Valid).First();
+            
+            sb.AppendLine("# 单项描述表")
+            .Append("|单项编号|单项描述|")
+            .AppendLine()
+            .Append("|:--|:--|")
+            .AppendLine();
+            
+            int j=1;
+            foreach(var ass in firstValidStudent.Items){
+                sb.Append("|单项")
+                .Append(j++)
+                .Append("|")
+                .Append(ass.Description)
+                .Append("|")
+                .AppendLine();
+            }
+            sb.AppendLine("|AHPW|SE: Average Hours Per Week 平均每周所花时间|")
+            .AppendLine("|LOC|SE: Lines Of Code 代码行数|")
+            .AppendLine("|AIR|SE：Average Improvement Rate 平均提高幅度|")
+            .AppendLine();
+        }else{
+            sb.AppendLine();
+        }
         
         // Dump School Statictis
         var totalCount = Classes.Sum(c=>c.TotalCount);
@@ -689,8 +689,8 @@ public class SchoolAssessment{
           .AppendFormat("    - 平均耗时：{0:##.00} 小时/每人每周\r\n",UnionClass.AHPW)
           .AppendFormat("    - 平均代码行数：{0:##} 行/每人\r\n",UnionClass.LOC)
           .AppendLine();
-		  
-		UnionClass.Students.DumpPlot(sb,Name,20);
+          
+        UnionClass.Students.DumpPlot(sb,Name,20);
           
         // Dump Class Statistic
         foreach(var c in Classes){
@@ -700,235 +700,235 @@ public class SchoolAssessment{
 }
 
 public class Render : IDisposable{
-	private bool disposed = false;
-	
-	public Graphics Graphics{get;private set;}
-	private Dictionary<string,Pen> Pens{get;set;}
-	private Dictionary<string,Brush> Brushes{get;set;}
-	private Dictionary<string,Font> Fonts{get;set;}
-	
-	public Render(Bitmap bitmap){
-		Graphics = Graphics.FromImage(bitmap);
-		Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
-		Pens = new  Dictionary<string,Pen>();
-		Brushes = new Dictionary<string,Brush>();
-		Fonts = new Dictionary<string,Font>();
-	}
-	public Pen Pen(string name,Color c){
-		var pen = new Pen(c);
-		Pens.Add(name,pen,(n,p)=>p.Dispose());
-		return pen;
-	}
-	public Brush Brush(string name,Color c){
-		var brush = new SolidBrush(c);
-		Brushes.Add(name,brush,(n,b)=>b.Dispose());
-		return brush;
-	}
-	public Font Font(string name,string fontName,int fontSize){
-		var font = new Font(new FontFamily(fontName),fontSize);
-		Fonts.Add(name,font,(n,f)=>f.Dispose());
-		return font;
-	}
-				
-	#region IDispose
-	public void Dispose(){
-		Dispose(true);
-		GC.SuppressFinalize(this);
-	}
-	protected virtual void Dispose(bool disposing){
-		if(disposed) return;
-		disposed = true;
-		
-		// NOTE:
-		// Release unmanaged resources here
-		
-		if(!disposing) return;
-		
-		// NOTE:
-		// Release managed resources here
-		Pens.ForEach((n,p)=>p.Dispose());
-		Brushes.ForEach((n,b)=>b.Dispose());
-		Fonts.ForEach((n,f)=>f.Dispose());
-	}
-	#endregion
+    private bool disposed = false;
+    
+    public Graphics Graphics{get;private set;}
+    private Dictionary<string,Pen> Pens{get;set;}
+    private Dictionary<string,Brush> Brushes{get;set;}
+    private Dictionary<string,Font> Fonts{get;set;}
+    
+    public Render(Bitmap bitmap){
+        Graphics = Graphics.FromImage(bitmap);
+        Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
+        Pens = new  Dictionary<string,Pen>();
+        Brushes = new Dictionary<string,Brush>();
+        Fonts = new Dictionary<string,Font>();
+    }
+    public Pen Pen(string name,Color c){
+        var pen = new Pen(c);
+        Pens.Add(name,pen,(n,p)=>p.Dispose());
+        return pen;
+    }
+    public Brush Brush(string name,Color c){
+        var brush = new SolidBrush(c);
+        Brushes.Add(name,brush,(n,b)=>b.Dispose());
+        return brush;
+    }
+    public Font Font(string name,string fontName,int fontSize){
+        var font = new Font(new FontFamily(fontName),fontSize);
+        Fonts.Add(name,font,(n,f)=>f.Dispose());
+        return font;
+    }
+                
+    #region IDispose
+    public void Dispose(){
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
+    protected virtual void Dispose(bool disposing){
+        if(disposed) return;
+        disposed = true;
+        
+        // NOTE:
+        // Release unmanaged resources here
+        
+        if(!disposing) return;
+        
+        // NOTE:
+        // Release managed resources here
+        Pens.ForEach((n,p)=>p.Dispose());
+        Brushes.ForEach((n,b)=>b.Dispose());
+        Fonts.ForEach((n,f)=>f.Dispose());
+    }
+    #endregion
 }
 
 public static class Lambda{
-	public static Action<T,T,T,T> Action<T>(Action<T,T,T,T> a){
-		return a;
-	}
+    public static Action<T,T,T,T> Action<T>(Action<T,T,T,T> a){
+        return a;
+    }
 }
 
 public class Axis{
-	public int OX{get;private set;}
-	public int OY{get;private set;}
-	public int XStep{get;private set;}
-	public int YStep{get;private set;}
-	public Axis(int ox,int oy,int xstep,int ystep){
-		OX = ox;
-		OY = oy;
-		XStep = xstep;
-		YStep = ystep;
-	}
+    public int OX{get;private set;}
+    public int OY{get;private set;}
+    public int XStep{get;private set;}
+    public int YStep{get;private set;}
+    public Axis(int ox,int oy,int xstep,int ystep){
+        OX = ox;
+        OY = oy;
+        XStep = xstep;
+        YStep = ystep;
+    }
 }
 
 public class Canvas{
-	public Bitmap Bitmap{get;private set;}
-	public int Left{get;private set;}
-	public int Top{get;private set;}
-	public int Bottom{get;private set;}
-	public int Right{get;private set;}
-	public int Width{get;private set;}
-	public int Height{get;private set;}
-	public int XStep{get;private set;}
-	public int YStep{get;private set;}
-	public int XSize{get;private set;}
-	public int YSize{get;private set;}
-	public Axis Axis{get;private set;}
-	public int AxisMargin{get;private set;}
-	
-	public Canvas(int left,int top,int width,int height,int xstep,int ystep){
-		Bitmap = new Bitmap(width,height);
-		
-		Left = left;
-		Top = top;
-		
-		Width = width-2*left;
-		Height = height-2*top;
-		
-		Bottom = top+Height;
-		Right = left+Width;
-		
-		XStep = xstep;
-		YStep = ystep;
-		XSize = (int)Math.Floor((Width+XStep)*1.0/xstep);
-		YSize = (int)Math.Floor((Height+YStep)*1.0/ystep);
-		
-		Axis = new Axis(Left,Bottom,XStep,YStep);
-	}
-	
-	public Render AsRender(){
-		return new Render(Bitmap);
-	}
+    public Bitmap Bitmap{get;private set;}
+    public int Left{get;private set;}
+    public int Top{get;private set;}
+    public int Bottom{get;private set;}
+    public int Right{get;private set;}
+    public int Width{get;private set;}
+    public int Height{get;private set;}
+    public int XStep{get;private set;}
+    public int YStep{get;private set;}
+    public int XSize{get;private set;}
+    public int YSize{get;private set;}
+    public Axis Axis{get;private set;}
+    public int AxisMargin{get;private set;}
+    
+    public Canvas(int left,int top,int width,int height,int xstep,int ystep){
+        Bitmap = new Bitmap(width,height);
+        
+        Left = left;
+        Top = top;
+        
+        Width = width-2*left;
+        Height = height-2*top;
+        
+        Bottom = top+Height;
+        Right = left+Width;
+        
+        XStep = xstep;
+        YStep = ystep;
+        XSize = (int)Math.Floor((Width+XStep)*1.0/xstep);
+        YSize = (int)Math.Floor((Height+YStep)*1.0/ystep);
+        
+        Axis = new Axis(Left,Bottom,XStep,YStep);
+    }
+    
+    public Render AsRender(){
+        return new Render(Bitmap);
+    }
 }
 
 public class Plot{
-	public int Width{get;private set;}
-	public int Height{get;private set;}
-	public Canvas Canvas{get;private set;}
-	public Bitmap Bitmap{
-		get{
-			return Canvas.Bitmap;
-		}
-	}
+    public int Width{get;private set;}
+    public int Height{get;private set;}
+    public Canvas Canvas{get;private set;}
+    public Bitmap Bitmap{
+        get{
+            return Canvas.Bitmap;
+        }
+    }
 
-	public Plot(int marginX,int marginY,int xstep,int ystep,int xsize,int ysize){
-		Width  = marginX*2+xstep*xsize+xstep/2;
-		Height = marginY*2+ystep*ysize+ystep/2;
-		Canvas = new Canvas(marginX,marginY,Width,Height,xstep,ystep);
-	}
-	public Plot Axis(){
-		var c = Canvas;
-		using(var r = c.AsRender()){
+    public Plot(int marginX,int marginY,int xstep,int ystep,int xsize,int ysize){
+        Width  = marginX*2+xstep*xsize+xstep/2;
+        Height = marginY*2+ystep*ysize+ystep/2;
+        Canvas = new Canvas(marginX,marginY,Width,Height,xstep,ystep);
+    }
+    public Plot Axis(){
+        var c = Canvas;
+        using(var r = c.AsRender()){
 
-			// Prepare
-			var g = r.Graphics;
-			var p = r.Pen("line",Color.Black);
-			var b = r.Brush("text",Color.Black);
-			var	f = r.Font("default","宋体",9);
-			
-			
-			// Draw X Axis
-			g.DrawLine(p,c.Left,c.Bottom,c.Right,c.Bottom);
-			g.DrawArrow(p,c.Right-3,c.Bottom-3,c.Right,c.Bottom,c.Right-3,c.Bottom+3);
-			//g.DrawArrow(p,c.Axis,c.Width*1.0F,0.0F,5,45);
-			//g.DrawArrow(p,c.Axis,c.Width*1.0F/2,c.Height*1.0F/2,5,45);
-			
-			for(int i=0;i<c.XSize;i++){
-				// Draw Axis
-				var x1 = c.Left+c.XStep*i;
-				var y1 = c.Bottom;
-				var x2 = x1;
-				var y2 = y1-5;
-				g.DrawLine(p,x1,y1,x2,y2);
-				
-				// Draw Label
-				int shift=i.CarryNumber();
-				g.DrawString(i.ToString(),f,b,x1-3,y1+5);
-			}
-			
-			// Draw Y Axis
-			g.DrawLine(p,c.Left,c.Bottom,c.Left,c.Top);
-			g.DrawArrow(p,c.Left-3,c.Top+3,c.Left,c.Top,c.Left+3,c.Top+3);
-			//g.DrawArrow(p,c.Axis,0.0F,c.Height*1.0F,5,45);
-			
-			for(int i=0;i<c.YSize;i++){
-				// Draw Axis
-				var x1 = c.Left;
-				var y1 = c.Bottom-c.YStep*i;
-				var x2 = x1+5;
-				var y2 = y1;
-				g.DrawLine(p,x1,y1,x2,y2);
-				
-				// Draw Lable
-				int shift=i.CarryNumber();
-				g.DrawString(i.ToString(),f,b,x1-10*shift,y1-3);
-			}
-		}
-		return this;
-	}
-	
-	private int curvesCount=0;
-	public Plot Curve(string title,float[] x,float[] y,Color lineColor,Color dotColor){
-		var v = x.Zip(y,(a,b)=>Tuple.Create(a,b));
-		
-		var c = Canvas;
-		using(var r = c.AsRender()){
-			
-			// Prepare
-			var g = r.Graphics;
-			var linePen = r.Pen("line",lineColor);
-			var dotPen = r.Pen("dot",dotColor);
-			var textBrush = r.Brush("text",Color.Black);
-			var font = r.Font("default","宋体",9);
-			
-			// Draw Title
-			var titlePos = 60;
-			g.DrawEllipse(linePen,c.Right-titlePos,c.Top+(curvesCount+2)*12+2.5f,5,5);
-			g.DrawString(title,font,textBrush,c.Right-titlePos+10,c.Top+(curvesCount+2)*12);
-			
-			// Draw Curve
-			v.ForEach(
-				firstPos=>g.DrawEllipse(dotPen,c.Axis,firstPos,2),
-				(index,pos1,pos2)=>
-					g.DrawEllipse(dotPen,c.Axis,pos1,2)
-				     .DrawLine(linePen,c.Axis,pos1,pos2));
-		}
-		curvesCount++;
-		return this;
-	}
-	
-	public Plot Histogram(string title,float[] x,float[] y,Color lineColor,Color fillColor){
-		var v = x.Zip(y,(a,b)=>Tuple.Create(a,b));
-		var c = Canvas;
-		var axis = c.Axis;
-		using(var r = c.AsRender()){
-			var g = r.Graphics;
-			var linePen = r.Pen("line",lineColor);
-			var fillBrush = r.Brush("fill",fillColor);
-			var textBrush = r.Brush("text",fillColor);
-			var font = r.Font("default","宋体",9);
-			
-			v.ForEach(pos=>
-				g.DrawRectangle(linePen,axis,pos)
-				 .FillRectangle(fillBrush,axis,pos));
-		}
-		return this;
-	}
+            // Prepare
+            var g = r.Graphics;
+            var p = r.Pen("line",Color.Black);
+            var b = r.Brush("text",Color.Black);
+            var    f = r.Font("default","宋体",9);
+            
+            
+            // Draw X Axis
+            g.DrawLine(p,c.Left,c.Bottom,c.Right,c.Bottom);
+            g.DrawArrow(p,c.Right-3,c.Bottom-3,c.Right,c.Bottom,c.Right-3,c.Bottom+3);
+            //g.DrawArrow(p,c.Axis,c.Width*1.0F,0.0F,5,45);
+            //g.DrawArrow(p,c.Axis,c.Width*1.0F/2,c.Height*1.0F/2,5,45);
+            
+            for(int i=0;i<c.XSize;i++){
+                // Draw Axis
+                var x1 = c.Left+c.XStep*i;
+                var y1 = c.Bottom;
+                var x2 = x1;
+                var y2 = y1-5;
+                g.DrawLine(p,x1,y1,x2,y2);
+                
+                // Draw Label
+                int shift=i.CarryNumber();
+                g.DrawString(i.ToString(),f,b,x1-3,y1+5);
+            }
+            
+            // Draw Y Axis
+            g.DrawLine(p,c.Left,c.Bottom,c.Left,c.Top);
+            g.DrawArrow(p,c.Left-3,c.Top+3,c.Left,c.Top,c.Left+3,c.Top+3);
+            //g.DrawArrow(p,c.Axis,0.0F,c.Height*1.0F,5,45);
+            
+            for(int i=0;i<c.YSize;i++){
+                // Draw Axis
+                var x1 = c.Left;
+                var y1 = c.Bottom-c.YStep*i;
+                var x2 = x1+5;
+                var y2 = y1;
+                g.DrawLine(p,x1,y1,x2,y2);
+                
+                // Draw Lable
+                int shift=i.CarryNumber();
+                g.DrawString(i.ToString(),f,b,x1-10*shift,y1-3);
+            }
+        }
+        return this;
+    }
+    
+    private int curvesCount=0;
+    public Plot Curve(string title,float[] x,float[] y,Color lineColor,Color dotColor){
+        var v = x.Zip(y,(a,b)=>Tuple.Create(a,b));
+        
+        var c = Canvas;
+        using(var r = c.AsRender()){
+            
+            // Prepare
+            var g = r.Graphics;
+            var linePen = r.Pen("line",lineColor);
+            var dotPen = r.Pen("dot",dotColor);
+            var textBrush = r.Brush("text",Color.Black);
+            var font = r.Font("default","宋体",9);
+            
+            // Draw Title
+            var titlePos = 60;
+            g.DrawEllipse(linePen,c.Right-titlePos,c.Top+(curvesCount+2)*12+2.5f,5,5);
+            g.DrawString(title,font,textBrush,c.Right-titlePos+10,c.Top+(curvesCount+2)*12);
+            
+            // Draw Curve
+            v.ForEach(
+                firstPos=>g.DrawEllipse(dotPen,c.Axis,firstPos,2),
+                (index,pos1,pos2)=>
+                    g.DrawEllipse(dotPen,c.Axis,pos1,2)
+                     .DrawLine(linePen,c.Axis,pos1,pos2));
+        }
+        curvesCount++;
+        return this;
+    }
+    
+    public Plot Histogram(string title,float[] x,float[] y,Color lineColor,Color fillColor){
+        var v = x.Zip(y,(a,b)=>Tuple.Create(a,b));
+        var c = Canvas;
+        var axis = c.Axis;
+        using(var r = c.AsRender()){
+            var g = r.Graphics;
+            var linePen = r.Pen("line",lineColor);
+            var fillBrush = r.Brush("fill",fillColor);
+            var textBrush = r.Brush("text",fillColor);
+            var font = r.Font("default","宋体",9);
+            
+            v.ForEach(pos=>
+                g.DrawRectangle(linePen,axis,pos)
+                 .FillRectangle(fillBrush,axis,pos));
+        }
+        return this;
+    }
 }
 
 public static class Extension{
-	#region assessment
+    #region assessment
     public static U TryGet<T,U>(this Dictionary<T,U> dict,T key){
         U u = default(U);
         dict.TryGetValue(key,out u);
@@ -981,28 +981,28 @@ public static class Extension{
         }  
     }  
     public static string ValueAt(this Match match,int index){
-		if(index>=match.Groups.Count){
-			return "";
-		}
-		return match.Groups[index].Value;
-	}
+        if(index>=match.Groups.Count){
+            return "";
+        }
+        return match.Groups[index].Value;
+    }
     public static double ToDouble(this string s){
         double v=0;
         Double.TryParse(s,out v);
         return v;
     }
-	public static void DumpPlot(this IEnumerable<StudentAssessment> students,StringBuilder sb,string alt,int range=10){
-		//if(true) return;
-		var marginX = 20;
-		var marginY = 20;
-		var stepX = 20;
-		var stepY =20;
-		var sizeX = range;
-		var sizeY = range;
-		
-		var plot1 = new Plot(marginX,marginY,stepX,stepY,sizeX,sizeY);
-		var plot2 = new Plot(marginX,marginY,stepX,stepY,sizeX,sizeY);
-		var plot3 = new Plot(marginX,marginY,stepX,stepY,sizeX,sizeY);
+    public static void DumpPlot(this IEnumerable<StudentAssessment> students,StringBuilder sb,string alt,int range=10){
+        //if(true) return;
+        var marginX = 20;
+        var marginY = 20;
+        var stepX = 20;
+        var stepY =20;
+        var sizeX = range;
+        var sizeY = range;
+        
+        var plot1 = new Plot(marginX,marginY,stepX,stepY,sizeX,sizeY);
+        var plot2 = new Plot(marginX,marginY,stepX,stepY,sizeX,sizeY);
+        var plot3 = new Plot(marginX,marginY,stepX,stepY,sizeX,sizeY);
         
         var maxAHPW = students.Max(s=>s.AHPW);
         var maxLOC = students.Max(s=>s.LOC);
@@ -1010,206 +1010,206 @@ public static class Extension{
         
         var ahpw = students.OrderBy(s=>s.AHPW).Select(s=>new {AHPW=s.AHPW.Normal(maxAHPW,range),AIR=s.Air.Normal(maxsAir,range),LOC=s.LOC.Normal(maxLOC,range)});
         var loc = students.OrderBy(s=>s.LOC).Select(s=>new {LOC=s.LOC.Normal(maxLOC,range),AIR=s.Air.Normal(maxsAir,range)});
-		
-		var ahpwN = ahpw.Select(i=>i.AHPW).ToArray();
-		var airN1 = ahpw.Select(i=>i.AIR).ToArray();
-		
-		var locN = loc.Select(i=>i.LOC).ToArray();
-		var airN2 = loc.Select(i=>i.AIR).ToArray();
-		
-		var locN2 = ahpw.Select(i=>i.LOC).ToArray();
-		
-		var image1 = 
-		plot1.Axis()
+        
+        var ahpwN = ahpw.Select(i=>i.AHPW).ToArray();
+        var airN1 = ahpw.Select(i=>i.AIR).ToArray();
+        
+        var locN = loc.Select(i=>i.LOC).ToArray();
+        var airN2 = loc.Select(i=>i.AIR).ToArray();
+        
+        var locN2 = ahpw.Select(i=>i.LOC).ToArray();
+        
+        var image1 = 
+        plot1.Axis()
              .Curve("AHPW->AIR",ahpwN,airN1,Color.Green,Color.LightGreen)
              .Bitmap;
-		
-		var image2 = 
-		plot2.Axis()
-		     .Curve("LOC->AIR",locN,airN2,Color.Red,Color.LightPink)
-			 .Bitmap;
-			
-		var image3 = 
-		plot3.Axis()
-			 .Curve("AHPW->LOC",ahpwN,locN2,Color.Blue,Color.LightBlue)
-			 .Bitmap;
-			
-		sb.AppendLine(image1.ToBase64ImageTag(ImageFormat.Png,alt+" AHPW-AIR")).AppendLine();
-		sb.AppendLine(image2.ToBase64ImageTag(ImageFormat.Png,alt+" LOC-AIR")).AppendLine();
-		sb.AppendLine(image3.ToBase64ImageTag(ImageFormat.Png,alt+" AHPW-LOC")).AppendLine();
-		//sb.AppendLine();
-	}
-	#endregion
-	
-	#region plot
-	public static Graphics DrawArrow(this Graphics g,Pen p,int x1,int y1,int x2,int y2,int x3,int y3){
-		g.DrawLines(p,new Point[]{
-			new Point(x1,y1),
-			new Point(x2,y2),
-			new Point(x3,y3),
-		});
-		return g;
-	}
-	public static Graphics DrawArrow(this Graphics g,Pen p,Axis o, float vecx,float vecy,double width,double degrees) {
-		double angle = degrees*Math.PI/180.0;
-		double cos = Math.Cos(angle);
-		double sin = Math.Sin(angle);
-		
-		double a = width*cos;
-		double b = width*sin;
-		
-		double d = Math.Sqrt(vecx*vecx+vecy*vecy);
-		
-		
-		double r = (d-a)/d;
-		double px = vecx*r;
-		double py = vecy*r;
-		double rotateAngle = Math.Atan(b/(d-a));
-		
-		cos = Math.Cos(rotateAngle);
-		sin = Math.Sin(rotateAngle);
-		
-		float x1 = (float)(px * cos - py * sin);
-		float y1 = (float)(px * sin + py * cos);
-		
-		cos = Math.Cos(-1.0*rotateAngle);
-		sin = Math.Sin(-1.0*rotateAngle);
-		float x2 = (float)(px * cos - py * sin);
-		float y2 = (float)(px * sin + py * cos);
-		
-		g.DrawLines(p,new PointF[]{
-			new PointF(o.OX+x1,o.OY-y1),
-			new PointF(o.OX+vecx,o.OY-vecy),
-			new PointF(o.OX+x2,o.OY-y2),
-		});
-		return g;
-	}
-	public static Graphics DrawEllipse(this Graphics g,Pen p,Axis a,Tuple<float,float> pos,int r) {
-		g.DrawEllipse(p,new RectangleF(a.OX+pos.Item1*a.XStep-r,a.OY-pos.Item2*a.YStep-r,r*2,r*2));
-		return g;
-	}
-	public static Graphics DrawLine(this Graphics g,Pen p,Axis a,Tuple<float,float> pos1,Tuple<float,float> pos2){
-		g.DrawLine(p,a.OX+pos1.Item1*a.XStep,a.OY-pos1.Item2*a.YStep,a.OX+pos2.Item1*a.XStep,a.OY-pos2.Item2*a.YStep);
-		return g;
-	}
-	public static Graphics DrawRectangle(this Graphics g,Pen p,Axis a,Tuple<float,float> pos){
-		g.DrawRectangle(p,a.OX+pos.Item1*a.XStep+1,a.OY-pos.Item2*a.YStep,a.XStep-1,pos.Item2*a.YStep-1);
-		return g;
-	}
-	public static Graphics FillRectangle(this Graphics g,Brush b,Axis a,Tuple<float,float> pos){
-		g.FillRectangle(b,a.OX+pos.Item1*a.XStep+2,a.OY-pos.Item2*a.YStep+1,a.XStep-3,pos.Item2*a.YStep-3);
-		return g;
-	}
-		
-	public static R Aggregate<T,R>(this IEnumerable<T> list,R seed,Func<R,T,R> first,Func<R,int,T,R> con){
-		if(!list.Any()){
-			return default(R);
-		}
-		
-		var e = list.GetEnumerator();
-		
-		T a = default(T);
-		
-		R r = seed;
-		if(e.MoveNext()){
-			a = (T)e.Current;	
-			r = first(seed,a);
-		}
-		
-		int i = 1;
-		while(e.MoveNext()){
-			a = (T)e.Current;
-			r = con(r,i,a);
-			i++;
-		}
-		
-		return r;
-	}
-	public static IEnumerable<T> ForEach<T>(this IEnumerable<T> list,Action<T> a){
-		foreach(var item in list){
-			a(item);
-		}
-		return list;
-	}
-	public static IEnumerable<T> ForEach<T>(this IEnumerable<T> list,Action<T> first,Action<int,T,T> next){
-		var e = list.GetEnumerator();
-		
-		T a = default(T);
-		if(e.MoveNext()){
-			a = (T)e.Current;	
-			first(a);
-		}else{
-			return list;
-		}
-		
-		int i = 1;
-		while(e.MoveNext()){
-			T b = (T)e.Current;
-			next(i,a,b);
-			i++;
-			a = b;
-		}
-		
-		return list;
-	}
-	public static Dictionary<K,V> Add<K,V>(this Dictionary<K,V> dict,K key,V value,Action<K,V> delete){
-		if(dict.ContainsKey(key)){
-			var oldValue = dict[key];
-			delete(key,oldValue);
-			dict.Add(key,value);
-		}else{
-			dict.Add(key,value);
-		}
-		return dict;
-	}
-	public static Dictionary<K,V> ForEach<K,V>(this Dictionary<K,V> dict,Action<K,V> action){
-		foreach(var p in dict){
-			action(p.Key,p.Value);	
-		}
-		return dict;
-	}
-	public static int CarryNumber(this int v){
-		if(v==0) return 1;
-		int shift=0;
-		while(v>0) {shift++;v/=10;}
-		return shift;
-	}
-	
-	public static string ToBase64String(this Bitmap bmp, ImageFormat imageFormat){
-		string base64String = string.Empty;
-		MemoryStream memoryStream = new MemoryStream();
-		bmp.Save(memoryStream, imageFormat);
-		memoryStream.Position = 0;
-		byte[] byteBuffer = memoryStream.ToArray();
-		memoryStream.Close();
-		base64String = Convert.ToBase64String(byteBuffer);
-		byteBuffer = null;
-		return base64String;
-	}
-	public static string ToBase64ImageTag(this Bitmap bmp, ImageFormat imageFormat,string alt){
-		string imgTag = string.Empty;
-		string base64String = string.Empty;
-		base64String = bmp.ToBase64String(imageFormat);
-		imgTag = "<img alt=\""+alt+"\" src=\"data:image/" + imageFormat.ToString() + ";base64,";
-		imgTag += base64String + "\" ";
-		imgTag += "width=\"" + bmp.Width.ToString() + "\" ";
-		imgTag += "height=\"" + bmp.Height.ToString() + "\" />";
-		return imgTag;
-	}
+        
+        var image2 = 
+        plot2.Axis()
+             .Curve("LOC->AIR",locN,airN2,Color.Red,Color.LightPink)
+             .Bitmap;
+            
+        var image3 = 
+        plot3.Axis()
+             .Curve("AHPW->LOC",ahpwN,locN2,Color.Blue,Color.LightBlue)
+             .Bitmap;
+            
+        sb.AppendLine(image1.ToBase64ImageTag(ImageFormat.Png,alt+" AHPW-AIR")).AppendLine();
+        sb.AppendLine(image2.ToBase64ImageTag(ImageFormat.Png,alt+" LOC-AIR")).AppendLine();
+        sb.AppendLine(image3.ToBase64ImageTag(ImageFormat.Png,alt+" AHPW-LOC")).AppendLine();
+        //sb.AppendLine();
+    }
     #endregion
-	
-	#region spark
+    
+    #region plot
+    public static Graphics DrawArrow(this Graphics g,Pen p,int x1,int y1,int x2,int y2,int x3,int y3){
+        g.DrawLines(p,new Point[]{
+            new Point(x1,y1),
+            new Point(x2,y2),
+            new Point(x3,y3),
+        });
+        return g;
+    }
+    public static Graphics DrawArrow(this Graphics g,Pen p,Axis o, float vecx,float vecy,double width,double degrees) {
+        double angle = degrees*Math.PI/180.0;
+        double cos = Math.Cos(angle);
+        double sin = Math.Sin(angle);
+        
+        double a = width*cos;
+        double b = width*sin;
+        
+        double d = Math.Sqrt(vecx*vecx+vecy*vecy);
+        
+        
+        double r = (d-a)/d;
+        double px = vecx*r;
+        double py = vecy*r;
+        double rotateAngle = Math.Atan(b/(d-a));
+        
+        cos = Math.Cos(rotateAngle);
+        sin = Math.Sin(rotateAngle);
+        
+        float x1 = (float)(px * cos - py * sin);
+        float y1 = (float)(px * sin + py * cos);
+        
+        cos = Math.Cos(-1.0*rotateAngle);
+        sin = Math.Sin(-1.0*rotateAngle);
+        float x2 = (float)(px * cos - py * sin);
+        float y2 = (float)(px * sin + py * cos);
+        
+        g.DrawLines(p,new PointF[]{
+            new PointF(o.OX+x1,o.OY-y1),
+            new PointF(o.OX+vecx,o.OY-vecy),
+            new PointF(o.OX+x2,o.OY-y2),
+        });
+        return g;
+    }
+    public static Graphics DrawEllipse(this Graphics g,Pen p,Axis a,Tuple<float,float> pos,int r) {
+        g.DrawEllipse(p,new RectangleF(a.OX+pos.Item1*a.XStep-r,a.OY-pos.Item2*a.YStep-r,r*2,r*2));
+        return g;
+    }
+    public static Graphics DrawLine(this Graphics g,Pen p,Axis a,Tuple<float,float> pos1,Tuple<float,float> pos2){
+        g.DrawLine(p,a.OX+pos1.Item1*a.XStep,a.OY-pos1.Item2*a.YStep,a.OX+pos2.Item1*a.XStep,a.OY-pos2.Item2*a.YStep);
+        return g;
+    }
+    public static Graphics DrawRectangle(this Graphics g,Pen p,Axis a,Tuple<float,float> pos){
+        g.DrawRectangle(p,a.OX+pos.Item1*a.XStep+1,a.OY-pos.Item2*a.YStep,a.XStep-1,pos.Item2*a.YStep-1);
+        return g;
+    }
+    public static Graphics FillRectangle(this Graphics g,Brush b,Axis a,Tuple<float,float> pos){
+        g.FillRectangle(b,a.OX+pos.Item1*a.XStep+2,a.OY-pos.Item2*a.YStep+1,a.XStep-3,pos.Item2*a.YStep-3);
+        return g;
+    }
+        
+    public static R Aggregate<T,R>(this IEnumerable<T> list,R seed,Func<R,T,R> first,Func<R,int,T,R> con){
+        if(!list.Any()){
+            return default(R);
+        }
+        
+        var e = list.GetEnumerator();
+        
+        T a = default(T);
+        
+        R r = seed;
+        if(e.MoveNext()){
+            a = (T)e.Current;    
+            r = first(seed,a);
+        }
+        
+        int i = 1;
+        while(e.MoveNext()){
+            a = (T)e.Current;
+            r = con(r,i,a);
+            i++;
+        }
+        
+        return r;
+    }
+    public static IEnumerable<T> ForEach<T>(this IEnumerable<T> list,Action<T> a){
+        foreach(var item in list){
+            a(item);
+        }
+        return list;
+    }
+    public static IEnumerable<T> ForEach<T>(this IEnumerable<T> list,Action<T> first,Action<int,T,T> next){
+        var e = list.GetEnumerator();
+        
+        T a = default(T);
+        if(e.MoveNext()){
+            a = (T)e.Current;    
+            first(a);
+        }else{
+            return list;
+        }
+        
+        int i = 1;
+        while(e.MoveNext()){
+            T b = (T)e.Current;
+            next(i,a,b);
+            i++;
+            a = b;
+        }
+        
+        return list;
+    }
+    public static Dictionary<K,V> Add<K,V>(this Dictionary<K,V> dict,K key,V value,Action<K,V> delete){
+        if(dict.ContainsKey(key)){
+            var oldValue = dict[key];
+            delete(key,oldValue);
+            dict.Add(key,value);
+        }else{
+            dict.Add(key,value);
+        }
+        return dict;
+    }
+    public static Dictionary<K,V> ForEach<K,V>(this Dictionary<K,V> dict,Action<K,V> action){
+        foreach(var p in dict){
+            action(p.Key,p.Value);    
+        }
+        return dict;
+    }
+    public static int CarryNumber(this int v){
+        if(v==0) return 1;
+        int shift=0;
+        while(v>0) {shift++;v/=10;}
+        return shift;
+    }
+    
+    public static string ToBase64String(this Bitmap bmp, ImageFormat imageFormat){
+        string base64String = string.Empty;
+        MemoryStream memoryStream = new MemoryStream();
+        bmp.Save(memoryStream, imageFormat);
+        memoryStream.Position = 0;
+        byte[] byteBuffer = memoryStream.ToArray();
+        memoryStream.Close();
+        base64String = Convert.ToBase64String(byteBuffer);
+        byteBuffer = null;
+        return base64String;
+    }
+    public static string ToBase64ImageTag(this Bitmap bmp, ImageFormat imageFormat,string alt){
+        string imgTag = string.Empty;
+        string base64String = string.Empty;
+        base64String = bmp.ToBase64String(imageFormat);
+        imgTag = "<img alt=\""+alt+"\" src=\"data:image/" + imageFormat.ToString() + ";base64,";
+        imgTag += base64String + "\" ";
+        imgTag += "width=\"" + bmp.Width.ToString() + "\" ";
+        imgTag += "height=\"" + bmp.Height.ToString() + "\" />";
+        return imgTag;
+    }
+    #endregion
+    
+    #region spark
     private static readonly string spark = "▁▁▂▃▄▅▆▇█";
     public static char ToSpark(this int v){
-		try{
-        	return spark[v];
-		}catch{
-			v.Dump();
-			throw;
-		}
+        try{
+            return spark[v];
+        }catch{
+            v.Dump();
+            throw;
+        }
     }
     public static float Normal(this double v,double max,int r){
         return (float)(v*r/max);
     }
-	#endregion
+    #endregion
 }

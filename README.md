@@ -11,3 +11,4 @@
 - [x] gui for exceltk
 - [ ] auto fetch posts of student's cnblog
 - [66%] plot curver, histogram, pie. see:[plot.linq](https://github.com/fanfeilong/set/tree/master/src/plot/plot.linq)
+- [x] auto statistic student's self assessment tables, see:[statistic.linq](https://github.com/fanfeilong/set/blob/master/src/assessment/statistic.linq)
