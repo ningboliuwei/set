@@ -1,7 +1,6 @@
 <Query Kind="Program">
   <Namespace>System</Namespace>
   <Namespace>System.Drawing</Namespace>
-  <Namespace>System.Xml.Serialization</Namespace>
 </Query>
 
 void Main(){
