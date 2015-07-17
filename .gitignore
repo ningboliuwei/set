@@ -17,3 +17,9 @@
 /src/commandline/excel/obj/Debug/Excel.pdb
 /src/commandline/exceltk.v12.suo
 /src/commandline/excel/obj/Debug/*.cache
+/src/excel/*.suo
+/src/excel/Exceltk/bin
+/src/excel/Exceltk/obj
+/src/excel/Exceltk/ExcelToolKit.csproj.user
+/src/excel/ExceltkGUI/bin
+/src/excel/ExceltkGUI/obj
