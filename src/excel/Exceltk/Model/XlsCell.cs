@@ -39,7 +39,7 @@ namespace ExcelToolKit
         {
             get { 
                 return  IsHyperLink
-                    ? string.Format("[{0}]({1})",m_object,m_hyperLink)
+                    ? string.Format("[{0}]({1})", m_object, System.Web.HttpUtility.UrlPathEncode(m_hyperLink))
                     : m_object.ToString();
             }
         }

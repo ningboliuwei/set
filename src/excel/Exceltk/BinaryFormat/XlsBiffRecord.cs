@@ -78,7 +78,7 @@ namespace ExcelToolKit.BinaryFormat
                 return null;
 
 			uint ID = BitConverter.ToUInt16(bytes, (int)offset);
-			//Console.WriteLine("GetRecord {0}", (BIFFRECORDTYPE)ID);
+			////Console.WriteLine("GetRecord {0}", (BIFFRECORDTYPE)ID);
 			switch ((BIFFRECORDTYPE)ID)
 			{
 				case BIFFRECORDTYPE.BOF_V2:

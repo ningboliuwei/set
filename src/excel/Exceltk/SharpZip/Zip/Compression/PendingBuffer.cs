@@ -210,7 +210,7 @@ namespace ICSharpCode.SharpZipLib.Zip.Compression
 			}
 
 			//			if (DeflaterConstants.DEBUGGING) {
-			//				//Console.WriteLine("writeBits("+b+","+count+")");
+			//				////Console.WriteLine("writeBits("+b+","+count+")");
 			//			}
 #endif
 			bits |= (uint)(b << bitCount);

@@ -31,22 +31,69 @@ void Main()
         //"example"
     };
     
+    var doc3 = new List<string>(){
+        "this",
+        "is",
+        "a",
+        "a",
+        "sample"
+    };
+    
+    var doc4 = new List<string>(){
+        "this",
+        "is",
+        "a",
+        "two",
+        "sample"
+    };
+    
+    var doc5 = new List<string>(){
+        "this",
+        "is",
+        "ccc",
+        "sss",
+        "sample"
+    };
+    
+    var doc6 = new List<string>(){
+        "this",
+        "is",
+        "ccc",
+        "aasss",
+        "sample"
+    };
+    
+    var doc7 = new List<string>(){
+        "this",
+        "is",
+        "a",
+        "two",
+        "sample"
+    };
+    
+
+    
     var docs = new Dictionary<string,List<string>>{
         {"doc1",doc1},
-        {"doc2",doc2}
+        {"doc2",doc2},
+        {"doc3",doc3},
+        {"doc4",doc4},
+        {"doc5",doc5},
+        {"doc6",doc6},
+        {"doc7",doc7}
     };
     
     var fdIdfs = docs.ToFDIDF(2,
         f=>f,
         (N,d)=>1+Math.Log(N*1.0/d,10)
-    );
+    );    
     
-    fdIdfs["doc1"].Cos(fdIdfs["doc2"]).Dump();
+    fdIdfs.Rank().Dump();
 }
 
 // Define other methods and classes here
 public static class Extension{
-    public static Dictionary<string,List<double>> ToFDIDF(this Dictionary<string,List<string>> docs,int N,Func<int,int> tfFun,Func<int,int,double> idfFun){
+    public static List<Tuple<string,List<double>>> ToFDIDF(this Dictionary<string,List<string>> docs,int N,Func<int,int> tfFun,Func<int,int,double> idfFun){
         // caculate term frequency
         var tfs = 
         docs.AsParallel()
@@ -64,7 +111,7 @@ public static class Extension{
            .Dump();
            
         // calculate td-idfs
-        var tfidfs = new Dictionary<string,List<double>>();
+        var tfidfs = new List<Tuple<string,List<double>>>();
         foreach(var tf in tfs){
             var tfidf = new List<double>();
             var tfDict = tf.ToDictionary(t=>t.word,t=>t.value);
@@ -75,23 +122,27 @@ public static class Extension{
                     tfidf.Add(0);
                 }
             }
-            tfidfs.Add(tf.First().doc,tfidf);
+            tfidfs.Add(Tuple.Create(tf.First().doc,tfidf));
         }
         return tfidfs;
     }
     public static double Cos(this List<double> V1, List<double> V2){
-        int N = 0;
-        N = ((V2.Count < V1.Count)?V2.Count : V1.Count);
-        double dot = 0.0d;
+        int N = ((V2.Count < V1.Count)?V2.Count : V1.Count);
+        double dot  = 0.0d;
         double mag1 = 0.0d;
         double mag2 = 0.0d;
-        for (int n = 0; n < N; n++)
-        {
+        for (int n = 0; n < N; n++){
             dot += V1[n] * V2[n];
             mag1 += Math.Pow(V1[n], 2);
             mag2 += Math.Pow(V2[n], 2);
         }
-    
         return dot / (Math.Sqrt(mag1) * Math.Sqrt(mag2));
+    }
+    public static IEnumerable<Tuple<string,double>> Rank(this List<Tuple<string,List<double>>> list){
+        var item1 = list[0];
+        var query = list.Select(item=>Tuple.Create(item.Item1,item.Item2.Cos(item1.Item2))).OrderBy(v=>v.Item2);
+        foreach(var i in query){
+            yield return i;
+        }
     }
 }

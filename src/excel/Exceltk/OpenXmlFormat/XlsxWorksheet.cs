@@ -17,10 +17,11 @@ namespace ExcelToolKit.OpenXmlFormat
 		public const string A_r          = "r";
 		public const string A_t          = "t";
 		public const string A_s          = "s";
+		public const string A_display    = "display";
 		public const string N_sheetData  = "sheetData";
 		public const string N_inlineStr  = "inlineStr";
-        public const string N_hyperlinks = "hyperlinks";
-        public const string N_hyperlink  = "hyperlink";
+		public const string N_hyperlinks = "hyperlinks";
+		public const string N_hyperlink  = "hyperlink";
 
 		private XlsxDimension _dimension;
 

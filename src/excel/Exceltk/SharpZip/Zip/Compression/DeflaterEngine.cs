@@ -327,7 +327,7 @@ namespace ICSharpCode.SharpZipLib.Zip.Compression
 
 #if DebugDeflation
 				if (DeflaterConstants.DEBUGGING) {
-				   Console.WriteLine("Change from " + compressionFunction + " to "
+				   //Console.WriteLine("Change from " + compressionFunction + " to "
 										  + DeflaterConstants.COMPR_FUNC[level]);
 				}
 #endif
@@ -408,7 +408,7 @@ namespace ICSharpCode.SharpZipLib.Zip.Compression
 		{
 /*
 			if (DEBUGGING) {
-				Console.WriteLine("updateHash: "+strstart);
+				//Console.WriteLine("updateHash: "+strstart);
 			}
 */
 			ins_h = (window[strstart] << HASH_SHIFT) ^ window[strstart + 1];
@@ -592,7 +592,7 @@ namespace ICSharpCode.SharpZipLib.Zip.Compression
 #if DebugDeflation
 				if (DeflaterConstants.DEBUGGING) 
 				{
-				   Console.WriteLine("storedBlock[" + storedLength + "," + lastBlock + "]");
+				   //Console.WriteLine("storedBlock[" + storedLength + "," + lastBlock + "]");
 				}
 #endif
 

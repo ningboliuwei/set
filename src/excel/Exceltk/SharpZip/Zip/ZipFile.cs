@@ -323,14 +323,14 @@ namespace ICSharpCode.SharpZipLib.Zip
 	/// 	static public void Main(string[] args)
 	/// 	{
 	/// 		using (ZipFile zFile = new ZipFile(args[0])) {
-	/// 			Console.WriteLine("Listing of : " + zFile.Name);
-	/// 			Console.WriteLine("");
-	/// 			Console.WriteLine("Raw Size    Size      Date     Time     Name");
-	/// 			Console.WriteLine("--------  --------  --------  ------  ---------");
+	/// 			//Console.WriteLine("Listing of : " + zFile.Name);
+	/// 			//Console.WriteLine("");
+	/// 			//Console.WriteLine("Raw Size    Size      Date     Time     Name");
+	/// 			//Console.WriteLine("--------  --------  --------  ------  ---------");
 	/// 			foreach (ZipEntry e in zFile) {
 	/// 				if ( e.IsFile ) {
 	/// 					DateTime d = e.DateTime;
-	/// 					Console.WriteLine("{0, -10}{1, -10}{2}  {3}   {4}", e.Size, e.CompressedSize,
+	/// 					//Console.WriteLine("{0, -10}{1, -10}{2}  {3}   {4}", e.Size, e.CompressedSize,
 	/// 						d.ToString("dd-MM-yy"), d.ToString("HH:mm"),
 	/// 						e.Name);
 	/// 				}

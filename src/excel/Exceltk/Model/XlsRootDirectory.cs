@@ -34,7 +34,7 @@ namespace ExcelToolKit.BinaryFormat
 			{
 				entry = entries[i];
 
-				//Console.WriteLine("Directory Entry:{0} type:{1}, firstsector:{2}, streamSize:{3}, isEntryMiniStream:{4}", entry.EntryName, entry.EntryType.ToString(), entry.StreamFirstSector, entry.StreamSize, entry.IsEntryMiniStream);
+				////Console.WriteLine("Directory Entry:{0} type:{1}, firstsector:{2}, streamSize:{3}, isEntryMiniStream:{4}", entry.EntryName, entry.EntryType.ToString(), entry.StreamFirstSector, entry.StreamSize, entry.IsEntryMiniStream);
 				if (m_root == null && entry.EntryType == STGTY.STGTY_ROOT)
 					m_root = entry;
 				if (entry.ChildSid != (uint)FATMARKERS.FAT_FreeSpace)
